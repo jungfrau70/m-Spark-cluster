@@ -8,7 +8,7 @@ export PATH=${PYTHON_HOME}/bin:${PATH}
 
 #Spark
 export SPARK_PUBLIC_DNS="172.18.0.21"
-export SPARK_LOCAL_IP="0.0.0.0"
+export SPARK_LOCAL_IP="127.0.0.1"
 export SPARK_MASTER_HOST=master
 export SPARK_WORKER_INSTANCES=1
 export SPARK_EXECUTOR_CORES=1

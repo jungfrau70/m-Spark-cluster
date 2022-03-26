@@ -12,13 +12,17 @@ system_name = os.getenv('HOSTNAME')
 print(system_name)
             
 ### Configure spark session
+# spark = SparkSession\
+#    .builder\
+#    .master('spark://master:7077')\
+#    .appName('quake_etl')\
+#    .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1')\
+#    .config('spark.driver.bindAddress', 'master')\
+#    .getOrCreate()
 spark = SparkSession\
-   .builder\
-   .master('spark://master:7077')\
-   .appName('quake_etl')\
-   .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1')\
-   .config('spark.driver.bindAddress', 'master')\
-   .getOrCreate()
+    .builder\
+    .appName("quake_etl")\
+    .getOrCreate()
 
 spark.sparkContext._conf.getAll()
 

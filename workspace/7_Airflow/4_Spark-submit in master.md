@@ -72,16 +72,23 @@ spark-submit \
 export WORKDIR='/root/PySpark/workspace/7_Airflow/SparkSubmitOperator'
 cd $WORKDIR
 
+source ../config/hadoop-env.sh 
+
 spark-submit \
+        --master yarn \
+        --deploy-mode cluster \
         --conf "spark.mongodb.input.uri=mongodb://root:go2team@mongo/Quake.quakes?authSource=admin" \
         --conf "spark.mongodb.output.uri=mongodb://root:go2team@mongo/Quake.quakes?authSource=admin" \
         --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 \
         step1_preprocess.py 
 
 #########################################################################################
-# 6. (deploy-server) Restart cluster
+# 6. (deploy-server) Restart yarn cluster
 #########################################################################################
-~/stop-spark-cluster.sh && \
-~/stop-hadoop-cluster.sh && \
-~/start-hadoop-cluster.sh && \
-~/start-spark-cluster.sh 
+
+~/stop-hadoop-cluster.sh 
+
+~/start-hadoop-cluster.sh
+
+export SPARK_PUBLIC_DNS="172.18.0.21"
+export SPARK_LOCAL_IP="127.0.0.1"
