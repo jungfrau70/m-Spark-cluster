@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  mysql:
+    hostname: mysql
+    container_name: mysql
+    image: mysql:8
+    restart: always
+    command: 
+      - --lower_case_table_names=1
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.12
+    ports:
+      - "3307:3306" # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)  <- 컨테이너 내부는 무조건 3306
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      # - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./mysql-data:/var/lib/mysql # -v 옵션 (다렉토리 마운트 설정)
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - mysql.env
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

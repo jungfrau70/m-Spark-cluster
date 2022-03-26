@@ -1,0 +1,12 @@
+Map:  
+
+# Practice 1
+langs = ['spark', 'java', 'python', 'scala']
+upper_langs = map(str.upper , langs)
+print(list(upper_langs))
+
+# Practice 2
+my_strings = ['a', 'b', 'c', 'd', 'e']
+my_numbers = [1, 2, 3, 4, 5]
+results = list(map(lambda x, y: (x, y), my_strings, my_numbers))
+

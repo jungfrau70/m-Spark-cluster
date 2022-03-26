@@ -1,0 +1,153 @@
+version: '3.7'
+
+services:
+  master:
+    container_name: master
+    image: jungfrau70/centos7:de-cluster.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.21
+    # ports:
+    #   - "9090:8080"
+    #   - "7077:7077"
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ~/.ssh:/root/.ssh:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname master
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker1:
+    container_name: worker1
+    image: jungfrau70/centos7:de-cluster.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.31
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname worker1
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker2:
+    container_name: worker2
+    image: jungfrau70/centos7:de-cluster.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.32
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname worker2
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker3:
+    container_name: worker3
+    image: jungfrau70/centos7:de-cluster.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.33
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname worker3
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker4:
+    container_name: worker4
+    image: jungfrau70/centos7:de-cluster.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.34
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname worker4
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  hive-postgres:
+    container_name: hive-postgres
+    image: postgres:9.6.24 # latest
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.11
+    ports:
+    - "6432:5432"
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - postgres.env
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

@@ -1,0 +1,143 @@
+FROM ubuntu:18.04
+#FROM openkbs/tensorflow-python3-jupyter
+#FROM 11.4.1-devel-ubuntu20.04 
+#11.4.1-base-ubuntu18.04
+
+MAINTAINER InHwan Jung <inhwan.jungd@gmail.com>
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+USER root
+
+#### ---- Install some Tensorflow dependencies ----
+RUN apt-get update && apt-get install -y apt-utils 2>&1 | \
+    grep -v "^debconf: delaying package configuration, since apt-utils.*"  && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    libfreetype6-dev \
+    libpng-dev \
+    libzmq3-dev \
+    pkg-config \
+    python \
+    python3.6 \
+    python3.6-dev \
+    python-pip \
+    python3-pip \
+    python3-setuptools \
+    rsync \
+    software-properties-common \
+    unzip \
+    pkg-config libpcre3-dev zlib1g-dev liblzma-dev \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update -y && apt-get install -y openjdk-8-jdk
+
+#### Graphviz install ####
+#temp gpg error fix
+#RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+#temp gpg error fix
+RUN apt-get update -y
+RUN apt-get install -y graphviz
+
+###################################
+#### ----   PIP modules: ----  ####
+###################################
+#### ---- pip3 Package installation ---- ####
+
+COPY config/requirements.txt ./
+ENV PATH=${HOME}/.local/bin:${PATH}
+RUN python3 -m pip --no-cache-dir install --upgrade pip && \
+    python3 -m pip --no-cache-dir install --upgrade setuptools tensorflow && \
+    python3 -m pip --no-cache-dir install --ignore-installed notebook && \
+    python3 -m pip --no-cache-dir install --ignore-installed -r requirements.txt
+
+RUN python3 -m ipykernel.kernelspec
+##################################
+#### ----   Virtualenv: ----  ####
+##################################
+
+RUN apt-get update -y && \
+    pip3 --no-cache-dir install -U virtualenv 
+    
+#### ---- Ref: https://www.tensorflow.org/install/pip ---- ####
+RUN virtualenv --system-site-packages -p python3 ./venv && \
+    . ./venv/bin/activate  # sh, bash, ksh, or zsh && \
+    pip install --upgrade pip && \
+    pip list  # show packages installed within the virtual environment
+
+RUN chown -R ${USER}:${USER} ${HOME}
+
+#### ---- R inside Jupyter ---- ####
+#RUN apt install -y dirmngr gnupg apt-transport-https ca-certificates software-properties-common && \
+#RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'  && \
+RUN apt-get install -y r-base  && \
+    apt-get update -y  && \
+    apt-get install -y python3-ipykernel
+
+##################################
+#### Set up user environments ####
+##################################
+
+RUN echo "USER =======> ${USER}"
+
+ENV WORKSPACE=${HOME}/workspace
+ENV DATA=${HOME}/data
+
+RUN mkdir -p ${WORKSPACE} ${DATA} 
+
+#### ---- Jupyter Notebook Extensions ---- ####
+RUN apt-get update -y && apt-get dist-upgrade -y
+RUN pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master && \
+    jupyter contrib nbextension install
+    
+RUN pip install --upgrade jupyterlab jupyterlab-git
+
+# Expose Ports for TensorBoard (6006), Ipython (8888)
+EXPOSE 6006
+EXPOSE 8888
+
+VOLUME $HOME/data
+VOLUME $HOME/workspace
+VOLUME $HOME/logs
+VOLUME $HOME/notebooks
+
+## ref: https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(Native-GPU-Support)#usage
+##
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,video,utility
+
+############################################################################################
+#FROM openkbs/tensorflow-python3-jupyter:latest
+############################################################################################
+RUN apt-get install -y wget
+
+COPY ./config/install-hadoop.sh .
+RUN bash install-hadoop.sh
+
+COPY ./config/install-hive.sh .
+RUN bash install-hive.sh
+
+COPY ./config/install-spark.sh .
+RUN bash install-spark.sh
+
+COPY ./config/install-openssh-ubuntu.sh .
+RUN bash install-openssh-ubuntu.sh
+
+#### Download a postgresql jar file and copy it to /opt/hive/lib/
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /usr/local/spark/jars/postgresql-42.2.24.jar 
+
+## Install  MongoDB JDBC jar in Spark jars folder.
+RUN wget https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.11/2.4.0/mongo-spark-connector_2.11-2.4.0.jar --no-check-certificate -O /usr/local/spark/jars/mongo-spark-connector_2.11-2.4.0.jar
+
+## Install  MySQL jar in Spark jars folder.
+RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar --no-check-certificate -O /usr/local/spark/jars/mysql-connector-java-8.0.28.jar
+
+RUN rm /opt/hive/lib/guava*.jar && \
+    cp /opt/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/ || echo "not exist" && \
+    ln -s /opt/hive/conf/hive-site.xml /usr/local/spark/conf/
+
+### Download a postgresql jar file and copy it to /opt/hive/lib/
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /opt/hive/lib/postgresql-42.2.24.jar 

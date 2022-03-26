@@ -1,0 +1,11 @@
+### Create a Spark Object
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+        .builder \
+        .master('yarn') \
+        .appName("Python Spark SQL basic example") \
+        .getOrCreate()
+
+print("Spark Object id created ...")
+spark.stop()

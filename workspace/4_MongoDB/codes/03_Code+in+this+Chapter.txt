@@ -1,0 +1,45 @@
+
+Practice-1
+-----------
+basic.py
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+        .builder \
+        .master('yarn') \
+        .appName("Python Spark SQL basic example") \
+        .getOrCreate()
+
+print("Spark Object id created ...")
+print("Number of partitions for shuffle changed to : " + str(spark.conf.get('spark.sql.shuffle.partitions')))
+spark.stop()
+
+
+--Run the basic.py
+spark2-submit --conf spark.sql.shuffle.partitions=300 basic.py
+spark2-submit basic.py
+
+Practice-2
+----------
+
+basic.py
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+        .builder \
+        .master('yarn') \
+        .appName("Python Spark SQL basic example") \
+        .getOrCreate()
+
+print("Spark Object id created ...")
+print("Number of partitions for shuffle changed to : " + str(spark.conf.get('spark.sql.shuffle.partitions')))
+print("The HDFS Path is " + spark.conf.get("spark.yarn.appMasterEnv.HDFS_PATH"))
+spark.stop()
+
+--Run the basic.py
+spark2-submit --conf "spark.yarn.appMasterEnv.HDFS_PATH"="practice/retail_db/orders" basic.py
+
+
+-----END---------------

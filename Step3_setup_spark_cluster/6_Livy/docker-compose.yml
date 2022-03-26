@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+  livy:
+    hostname: livy
+    container_name: livy
+    image: jungfrau70/livy
+    build:
+      context: .
+      dockerfile: Dockerfile.livy
+    command: |
+      /usr/local/livy/bin/livy-server
+    ports:
+      - 8998:8998
+    env_file:
+      - livy.env
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.22
+
+  jupyter:
+    hostname: jupyter
+    container_name: jupyter
+    image: jungfrau70/jupyter
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+      args:
+        dev_mode: "false"
+    ports:
+      - "8888:8888"
+    command: |
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+    env_file:
+      - jupyter.env
+    volumes:
+      - shared-workspace:/opt/workspace
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.23
+
+volumes:
+    shared-workspace:
+        # name: "hadoop-distributed-file-system"
+        # driver: local
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
+
+#env
+

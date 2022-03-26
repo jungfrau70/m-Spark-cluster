@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  postgres:
+    hostname: postgres
+    container_name: postgres
+    image: postgres:9.6.24 # latest
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.14
+    ports:
+    - "7432:5432"
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      #- ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - postgres.env
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

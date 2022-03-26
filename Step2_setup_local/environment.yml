@@ -1,0 +1,19 @@
+# conda env create -f environment.yml
+# or conda env update --name myenv --file local.yml --prune
+# or conda activate myenv
+#    and conda env update -f environment.yml --prune
+
+# github EBISYS / WaterWatch / database.csv
+# git clone https://github.com/bokeh/bokeh-notebooks.git
+
+name: Spark-MongoDB-Bokeh-Django-Flask
+dependencies:
+  - bokeh
+  - django
+  - findspark
+  - ipywidgets
+  - jupyterlab
+  - nodejs
+  - pandas
+  - pymongo
+  - python

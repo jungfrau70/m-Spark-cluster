@@ -1,0 +1,72 @@
+version: '3.7'
+
+services:
+  master:
+    container_name: master
+    image:  centos:centos7.9.2009
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.11
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    command: ["/usr/sbin/init"]
+
+  worker1:
+    container_name: worker1
+    image:  centos:centos7.9.2009
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.31
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    command: ["/usr/sbin/init"]
+
+  worker2:
+    container_name: worker2
+    image:  centos:centos7.9.2009
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.32
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    command: ["/usr/sbin/init"]
+
+  worker3:
+    container_name: worker3
+    image:  centos:centos7.9.2009
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.33
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    command: ["/usr/sbin/init"]
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

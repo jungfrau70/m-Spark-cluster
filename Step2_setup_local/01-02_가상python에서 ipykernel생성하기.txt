@@ -1,0 +1,13 @@
+1. 가상 python 를 설치하고, ipykernel를 추가한다.
+# conda create --name pipeline
+# conda activate pipeline
+# conda env list
+# conda install -c conda-forge findspark
+-----------------------
+# python -m pip install ipykernel
+# python -m ipykernel install --name pipeline
+# jupyter notebook
+
+2. ipynb 파일을 열고 새로 추가한 kernel 로 변경한다.
+   (메뉴 : Kernel -> Change kernel -> pipeline)
+3. 코드를 실행한다.

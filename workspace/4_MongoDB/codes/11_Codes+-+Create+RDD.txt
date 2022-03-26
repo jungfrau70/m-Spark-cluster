@@ -1,0 +1,20 @@
+#Find Number of blocks in a file using fsck command
+hadoop fsck <file path>
+
+#####Practice 1
+--Create RDD using textFile API
+rdd = spark.sparkContext.textFile('practice/test')
+rdd.take(5)
+for i in rdd.take(5): print(i)
+--Get the Number of Partitions in the RDD
+rdd.getNumPartitions()
+--Get the Number of elements in each partition
+rdd.glom().map(len).collect()
+
+#####Practice 2
+--Create RDD using textFile API and a defined number of partitions
+rdd = spark.sparkContext.textFile('practice/test',10)
+--Get the Number of Partitions in the RDD
+rdd.getNumPartitions()
+--Get the Number of elements in each partition
+rdd.glom().map(len).collect()

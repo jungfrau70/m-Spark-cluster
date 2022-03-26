@@ -1,0 +1,7 @@
+--conf "spark.mongodb.input.uri=mongodb://127.0.0.1/Quake.quakes?readPreference=primaryPreferred" 
+--conf "spark.mongodb.output.uri=mongodb://127.0.0.1/Quake.quakes" 
+--packages org.mongodb.spark:mongo-spark-connector_2.12:2.4.1 
+
+# pyspark 
+# spark-submit
+# ipynb_3.py

@@ -1,0 +1,12 @@
+1. 모던 데이터엔지니어링 아키텍쳐
+2. 가상python에서 ipykernel 생성하기
+3. 첫번째 노트북_PySpark 연동
+4. 두번째 노트북_csv 파일을 읽어 변환 후 MongoDB에 적재
+5. 세번째 노트북_spark-submit
+6. Django 애플리케이션에 Bokeh 시각화 통합
+7. 시각화 (Bokch) Tutorial
+8. Pyspark Data Pipeline 작성 -- PySpark + MongoDB + Bokeh
+   8-1. PySpark 와 MongoDB로 ETL
+   8-2. PySpark 와 MLlib로 ML
+   8-3. Data Visualization
+   8-4. Data Pipeline Script 작성

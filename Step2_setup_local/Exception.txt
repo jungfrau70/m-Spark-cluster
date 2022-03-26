@@ -1,0 +1,9 @@
+Exception while deleting Spark temp dir
+
+winutils ls c:\tmp\hive
+winutils chmod -R 777  c:\tmp\hive
+
+Hiding the exceptions due to Bug....
+in %SPARK_HOME%\conf\log4j.properties, add two lines below
+log4j.logger.org.apache.spark.util.ShutdownHookManager=OFF
+log4j.logger.org.apache.spark.SparkEnv=ERROR

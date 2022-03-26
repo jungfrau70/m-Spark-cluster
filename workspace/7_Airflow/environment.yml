@@ -1,0 +1,14 @@
+name: pipeline
+dependencies:
+  - bokeh
+  - django
+  - ipywidgets
+  - jupyterlab
+  - nodejs
+  - pandas
+  - pymongo
+  - python==3.7
+  - requests
+  - pandas
+  - boto3
+  - pip

@@ -1,0 +1,8 @@
+spark2-submit /devl/example1/src/main/python/bin/basic.py
+
+spark2-submit --deploy-mode client  /devl/example1/src/main/python/bin/basic.py
+
+spark2-submit --deploy-mode cluster  /devl/example1/src/main/python/bin/basic.py
+
+yarn logs -application_id <enter_application_id>
+
