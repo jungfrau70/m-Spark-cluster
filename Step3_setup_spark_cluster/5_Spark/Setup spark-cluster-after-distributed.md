@@ -60,7 +60,6 @@ ansible -m ping cluster
 ## Check if ssh works
 docker exec -it master ssh worker1
 docker exec -it master ssh worker2
-docker exec -it worker1 ssh worker2
 
 
 #########################################################################################

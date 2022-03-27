@@ -4,12 +4,12 @@ services:
   master:
     hostname: master
     container_name: master
-    image: jungfrau70/ubuntu18.04:de-master.3
+    image: jungfrau70/ubuntu18.04:de-master.1
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark
     command: >
-      /bin/sh -c "service ssh start && 
+      /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
     restart: always
     networks:
@@ -17,10 +17,9 @@ services:
         ipv4_address: 172.18.0.21
     ports:
       - "4040:4040"
-      - "6066:6066"
       - "7077:7077"
-      - "8032:8032"      
       - "8088:8088"
+      - "8888:8888"
       - "9090:8080"
       - "18040:18040"
       - "18080:18080"
@@ -68,7 +67,7 @@ services:
         source: ./config/hive-site.xml
         target: /opt/hive/conf/hive-site.xml        
       - type: bind
-        source: ./config/hosts
+        source: ./config/hosts-master
         target: /etc/hosts
     privileged: true
     deploy:
@@ -85,12 +84,12 @@ services:
   worker1:
     hostname: worker1
     container_name: worker1
-    image: jungfrau70/ubuntu18.04:de-worker.3
+    image: jungfrau70/ubuntu18.04:de-worker.1
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark
     command: >
-      /bin/sh -c "service ssh start && 
+      /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
     restart: always
     networks:
@@ -140,7 +139,7 @@ services:
         source: ./config/hive-site.xml
         target: /opt/hive/conf/hive-site.xml        
       - type: bind
-        source: ./config/hosts
+        source: ./config/hosts-worker1
         target: /etc/hosts
     deploy:
       resources:
@@ -156,12 +155,12 @@ services:
   worker2:
     hostname: worker2
     container_name: worker2
-    image: jungfrau70/ubuntu18.04:de-worker.3
+    image: jungfrau70/ubuntu18.04:de-worker.1
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark
     command: >
-      /bin/sh -c "service ssh start && 
+      /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
     restart: always
     networks:
@@ -211,7 +210,7 @@ services:
         source: ./config/hive-site.xml
         target: /opt/hive/conf/hive-site.xml        
       - type: bind
-        source: ./config/hosts
+        source: ./config/hosts-worker2
         target: /etc/hosts
     deploy:
       resources:

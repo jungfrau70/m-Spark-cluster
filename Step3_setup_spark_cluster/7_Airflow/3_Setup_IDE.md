@@ -28,7 +28,7 @@ EOF
 #########################################################################################
 
 ## Create virtual env - pipeline
-export WORKDIR='/root/PySpark/workspace/'
+export WORKDIR='/root/PySpark/workspace/7_Airflow'
 cd $WORKDIR
 
 conda env create -f environment.yml
