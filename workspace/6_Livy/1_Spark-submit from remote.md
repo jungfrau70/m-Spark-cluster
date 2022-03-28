@@ -25,8 +25,7 @@ cd $WORKDIR
 
 ## Check if spark-submit works  ( 
 Livy        : http://localhost:8998/
-Spark-master: http://localhost:8080/
-spark-worker: http://localhost:8081/
+Hadoop      : http://localhost:8088/
 
 
 #########################################################################################
@@ -59,11 +58,11 @@ curl -X POST -d '{"kind": "pyspark"}' \
 curl -X POST -d '{ 
         "kind": "pyspark",
         "code": "for i in range(1,10):  print(i)" 
-        }' -H "Content-Type: application/json" spark-livy:8998/sessions/0/statements
+        }' -H "Content-Type: application/json" spark-livy:8998/sessions/1/statements
 
 
 ## Submit Spark Job
 curl -X POST -d '{ 
         "kind": "pyspark",
-        "code": "spark.sparkContext.applicationId" 
+        "code": "print(spark)" 
         }' -H "Content-Type: application/json" spark-livy:8998/sessions/0/statements

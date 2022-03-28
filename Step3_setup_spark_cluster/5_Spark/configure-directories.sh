@@ -16,4 +16,3 @@ hdfs dfs -put /opt/spark/jars/* /spark-jars
 hdfs dfs -put /opt/hive/lib/postgresql-42.2.24.jar /spark-jars
 
 hdfs dfs -ls /spark-jars/postgresql-42.2.24.jar
-hdfs dfs -ls /spark-jars/mongo-spark-connector_2.11-2.4.0.jar

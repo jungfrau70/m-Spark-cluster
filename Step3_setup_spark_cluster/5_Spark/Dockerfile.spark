@@ -108,7 +108,7 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,video,utility
 
 ############################################################################################
-#FROM openkbs/tensorflow-python3-jupyter:latest
+# Install Spark, etc
 ############################################################################################
 RUN apt-get install -y wget
 
@@ -130,10 +130,9 @@ RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-
 ## Install  MySQL jar in Spark jars folder.
 RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar --no-check-certificate -O /opt/spark/jars/mysql-connector-java-8.0.28.jar
 
-# (if spark v3 only, uncomment)
-# RUN rm /opt/hive/lib/guava*.jar && \
-#     cp /opt/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/ || echo "not exist" && \
-#     ln -s /opt/hive/conf/hive-site.xml /opt/spark/conf/
+RUN rm /opt/hive/lib/guava*.jar && \
+    cp /opt/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/ || echo "not exist" && \
+    ln -s /opt/hive/conf/hive-site.xml /opt/spark/conf/
 
 ### Download a postgresql jar file and copy it to /opt/hive/lib/
 RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /opt/hive/lib/postgresql-42.2.24.jar 

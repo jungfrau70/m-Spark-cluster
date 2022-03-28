@@ -1,10 +1,12 @@
-
 #########################################################################################
 # 1. (deploy-server) Preparation to start services
 #########################################################################################
 
 export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark/'
 cd $WORKDIR
+
+## (If required) Instanticate the containers
+rm -rf db.sql/ hive-postgres-data/ spark-apps/ spark-data
 
 docker-compose up -d
 

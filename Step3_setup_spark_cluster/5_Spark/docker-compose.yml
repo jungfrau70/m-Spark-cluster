@@ -5,9 +5,9 @@ services:
     hostname: master
     container_name: master
     image: jungfrau70/ubuntu18.04:de-master.5
-    build:
-      context: .
-      dockerfile: Dockerfile.spark
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
@@ -84,9 +84,9 @@ services:
     hostname: worker1
     container_name: worker1
     image: jungfrau70/ubuntu18.04:de-worker.5
-    build:
-      context: .
-      dockerfile: Dockerfile.spark
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
@@ -155,9 +155,9 @@ services:
     hostname: worker2
     container_name: worker2
     image: jungfrau70/ubuntu18.04:de-worker.5
-    build:
-      context: .
-      dockerfile: Dockerfile.spark
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"

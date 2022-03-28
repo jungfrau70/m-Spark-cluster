@@ -1,4 +1,4 @@
-127.0.0.1   localhost master.local
+127.0.0.1   localhost 
 
 172.18.0.11  hive-postgres
 172.18.0.12  mysql

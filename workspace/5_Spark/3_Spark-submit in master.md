@@ -33,7 +33,7 @@ docker exec -it master /bin/bash
 
 ## Check if it works
 which spark-submit
-#/usr/local/spark/bin/spark-submit
+#/opt/spark/bin/spark-submit
 
 which python3
 #/usr/bin/python3
@@ -50,8 +50,6 @@ cd $WORKDIR
         
 Standalone : http://localhost:9090/ 
 Yarn       : http://localhost:8088/
-
-
 
 
 #########################################################################################
