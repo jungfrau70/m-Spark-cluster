@@ -22,9 +22,9 @@ cd ~/.ssh
 cat id_rsa.pub > authorized_keys
 
 ## Instanticate the containers
-rm -rf db.sql/ postgres-data/ spark-apps/ spark-data
+rm -rf db.sql/ hive-postgres-data/ spark-apps/ spark-data
 
-docker-compose up
+docker-compose up -d
 
 docker stats
 
