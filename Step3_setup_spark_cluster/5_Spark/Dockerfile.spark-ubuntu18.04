@@ -127,17 +127,17 @@ COPY ./config/install-openssh-ubuntu.sh .
 RUN bash install-openssh-ubuntu.sh
 
 #### Download a postgresql jar file and copy it to /opt/hive/lib/
-RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /usr/local/spark/jars/postgresql-42.2.24.jar 
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /opt/spark/jars/postgresql-42.2.24.jar 
 
 ## Install  MongoDB JDBC jar in Spark jars folder.
-RUN wget https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.11/2.4.0/mongo-spark-connector_2.11-2.4.0.jar --no-check-certificate -O /usr/local/spark/jars/mongo-spark-connector_2.11-2.4.0.jar
+RUN wget https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.11/2.4.0/mongo-spark-connector_2.11-2.4.0.jar --no-check-certificate -O /opt/spark/jars/mongo-spark-connector_2.11-2.4.0.jar
 
 ## Install  MySQL jar in Spark jars folder.
-RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar --no-check-certificate -O /usr/local/spark/jars/mysql-connector-java-8.0.28.jar
+RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar --no-check-certificate -O /opt/spark/jars/mysql-connector-java-8.0.28.jar
 
 RUN rm /opt/hive/lib/guava*.jar && \
     cp /opt/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/ || echo "not exist" && \
-    ln -s /opt/hive/conf/hive-site.xml /usr/local/spark/conf/
+    ln -s /opt/hive/conf/hive-site.xml /opt/spark/conf/
 
 ### Download a postgresql jar file and copy it to /opt/hive/lib/
 RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /opt/hive/lib/postgresql-42.2.24.jar 

@@ -25,7 +25,7 @@ docker stats
 export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/7_Airflow/'
 cd $WORKDIR
 
-docker-compose up --build
+docker-compose up -d [--build]
 
 ## (if required) clean up 
 docker-compose rm -svf

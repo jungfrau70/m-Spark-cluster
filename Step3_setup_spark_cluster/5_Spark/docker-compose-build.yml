@@ -31,13 +31,13 @@ services:
       - ../../workspace:/root/workspace
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers
@@ -103,13 +103,13 @@ services:
       - ./spark-data:/opt/spark-data
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers
@@ -174,13 +174,13 @@ services:
       - ./spark-data:/opt/spark-data
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers

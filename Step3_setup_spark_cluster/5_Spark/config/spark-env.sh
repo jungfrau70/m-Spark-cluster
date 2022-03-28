@@ -11,7 +11,7 @@ export SPARK_MASTER_HOST=master
 export SPARK_WORKER_INSTANCES=1
 export SPARK_EXECUTOR_CORES=1
 export SPARK_EXECUTOR_MEMORY=4g
-export SPARK_HOME=/usr/local/spark
+export SPARK_HOME=/opt/spark
 export PYSPARK_PYTHON=python3
 
 #export SPARK_WORKER_CORES=1

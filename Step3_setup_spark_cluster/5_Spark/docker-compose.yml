@@ -4,10 +4,10 @@ services:
   master:
     hostname: master
     container_name: master
-    image: jungfrau70/ubuntu18.04:de-master.1
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.spark
+    image: jungfrau70/ubuntu18.04:de-master.5
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
@@ -32,13 +32,13 @@ services:
       - ../../workspace:/root/workspace
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers
@@ -84,10 +84,10 @@ services:
   worker1:
     hostname: worker1
     container_name: worker1
-    image: jungfrau70/ubuntu18.04:de-worker.1
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.spark
+    image: jungfrau70/ubuntu18.04:de-worker.5
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
@@ -104,13 +104,13 @@ services:
       - ./spark-data:/opt/spark-data
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers
@@ -155,10 +155,10 @@ services:
   worker2:
     hostname: worker2
     container_name: worker2
-    image: jungfrau70/ubuntu18.04:de-worker.1
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.spark
+    image: jungfrau70/ubuntu18.04:de-worker.5
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     command: >
       /bin/sh -c "service ssh start &&
                   tail -f /dev/null"
@@ -175,13 +175,13 @@ services:
       - ./spark-data:/opt/spark-data
       - type: bind
         source: ./config/spark-defaults.conf
-        target: /usr/local/spark/conf/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
       - type: bind
         source: ./config/spark-slaves
-        target: /usr/local/spark/conf/slaves
+        target: /opt/spark/conf/slaves
       - type: bind
         source: ./config/spark-env.sh
-        target: /usr/local/spark/conf/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
       - type: bind
         source: ./config/hadoop-workers
         target: /opt/hadoop/etc/hadoop/workers

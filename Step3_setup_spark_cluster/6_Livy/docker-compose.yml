@@ -1,44 +1,30 @@
 version: '3.7'
 services:
-  livy:
-    hostname: livy
-    container_name: livy
-    image: jungfrau70/livy
+  spark-livy:
+    hostname: spark-livy
+    container_name: spark-livy
+    image: jungfrau70/spark-livy
     build:
       context: .
-      dockerfile: Dockerfile.livy
-    command: |
-      /usr/local/livy/bin/livy-server
-    ports:
-      - 8998:8998
+      dockerfile: Dockerfile.spark-livy
+    command: ["sh", "-c", "/opt/livy/bin/livy-server"]
+    volumes:
+      - ./target:/target
+      - ./data:/data
+      - type: bind
+        source: ./conf/
+        target: /opt/livy/conf/
+      - type: bind
+        source: ./config/hosts
+        target: /etc/hosts
     env_file:
-      - livy.env
+      - spark-livy.env
     restart: always
     networks:
       netgroup:
         ipv4_address: 172.18.0.22
-
-  jupyter:
-    hostname: jupyter
-    container_name: jupyter
-    image: jungfrau70/jupyter
-    build:
-      context: .
-      dockerfile: Dockerfile.jupyter
-      args:
-        dev_mode: "false"
     ports:
-      - "8888:8888"
-    command: |
-      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
-    env_file:
-      - jupyter.env
-    volumes:
-      - shared-workspace:/opt/workspace
-    restart: always
-    networks:
-      netgroup:
-        ipv4_address: 172.18.0.23
+      - '8998:8998'
 
 volumes:
     shared-workspace:

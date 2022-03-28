@@ -4,13 +4,16 @@
 # 1. Install Apache Kafka
 #########################################################################################
 
-cd ~/PySpark/Step3_setup_spark_cluster/8_Kafka
-bash ./config/install-kafka.sh
+export WORKDIR="/root/PySpark/Step3_setup_spark_cluster/8_Kafka"
+cd $WORKDIR
 
+bash ./config/install-kafka.sh
 
 #########################################################################################
 # 2. Check the config settings
 #########################################################################################
+
+cd /opt/kafka
 
 ## zookeeper config with regular expression
 cat config/zookeeper.properties | grep -v -e "^#" -e "^$" 
@@ -29,6 +32,7 @@ cat config/producer.properties | grep -v '^$\|^#'
 
 vi config/producer.properties
 :q!
+
 ## consumer with PATTERN
 cat config/consumer.properties | grep -v ^'$\|#'
 
@@ -53,12 +57,12 @@ bin/kafka-server-start.sh -daemon config/server.properties
 # 4. Check Apache Kafka
 #########################################################################################
 
-## Install jdk
+## Install jdk in Centos 7
 yum search java-1.8.0-openjdk
 yum install java-1.8.0-openjdk
 yum install java-1.8.0-openjdk-devel
 
-or
+## Install jdk in Ubuntu 20.04
 apt install openjdk-8-jdk-headless
 
 ## jps
@@ -77,17 +81,17 @@ tcp6       0      0 :::2181                 :::*                    LISTEN
 # 5. Create New Topic
 #########################################################################################
 
-bin/kafka-topics.sh
+./bin/kafka-topics.sh
 
 ## broker:9092
-bin/kafka-topics.sh --create --topic first-topic --bootstrap-server localhost:9092  --partitions 1 --replication-factor 1
+./bin/kafka-topics.sh --create --topic first-topic --bootstrap-server localhost:9092  --partitions 3 --replication-factor 1
 
 
 #########################################################################################
 # 6. Get the list of Topic
 #########################################################################################
 
- ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092 
+./bin/kafka-topics.sh --list --bootstrap-server localhost:9092 
 
 
 #########################################################################################
@@ -101,7 +105,7 @@ bin/kafka-topics.sh --create --topic first-topic --bootstrap-server localhost:90
 # 8. Delete the specific topic
 #########################################################################################
 
-./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092 --topic first-topic
+#./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092 --topic first-topic
 
 
 #########################################################################################
@@ -218,7 +222,7 @@ bin/kafka-topics.sh --create --topic second-topic --bootstrap-server localhost:9
 
 
 ## Result ##
-When we send messing from multiple producers, two consumers get the messages evenly (maybe round-robin).
+When we send messing from multiple producers, two partitions get the messages evenly (maybe round-robin).
 It is because second-topic has 2 partitions.
 It show workload balancing in distrubeted environment. The number of partitions are critical for distributed processing, workload balancing.
 
@@ -229,13 +233,16 @@ It show workload balancing in distrubeted environment. The number of partitions 
 ## Move the kafka home
 cd /opt/kafka
 
-## Stop Zookeeper
-bin/zookeeper-server-stop.sh
-
 ## Stop Kafka broker ( depends on: Zookeeper )
 bin/kafka-server-stop.sh
 
+## Stop Zookeeper
+bin/zookeeper-server-stop.sh
+
 ## Check if they went down
 netstat -an | grep 2181
+netstat -an | grep 9092
 
 ( No LISTEN port )
+
+jps

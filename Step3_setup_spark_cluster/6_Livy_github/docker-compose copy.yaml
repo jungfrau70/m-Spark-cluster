@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  spark-livy:
+    build: ./
+    command: ["sh", "-c", "/opt/bitnami/livy/bin/livy-server"]
+    volumes:
+      - ./target:/target
+      - ./data:/data
+      - type: bind
+        source: ./conf/
+        target: /opt/bitnami/livy/conf/
+      - type: bind
+        source: ./config/hosts
+        target: /etc/hosts
+    ports:
+      - '8998:8998'
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.22
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

@@ -103,8 +103,8 @@ chmod u+x ./start-hadoop-cluster.sh
 ## Stop spark-custer
 cat >stop-spark-cluster.sh<<EOF
 #!/bin/bash
-docker exec master /usr/local/spark/sbin/stop-all.sh
-#docker exec master sudo /usr/local/spark/sbin/stop-all.sh
+docker exec master /opt/spark/sbin/stop-all.sh
+#docker exec master sudo /opt/spark/sbin/stop-all.sh
 
 nodes='master worker1 worker2'
 for node in \$nodes
@@ -120,8 +120,8 @@ chmod u+x stop-spark-cluster.sh
 ## Start spark-custer
 cat >start-spark-cluster.sh<<EOF
 #!/bin/bash
-docker exec master /usr/local/spark/sbin/start-all.sh
-#docker exec master sudo /usr/local/spark/sbin/start-all.sh
+docker exec master /opt/spark/sbin/start-all.sh
+#docker exec master sudo /opt/spark/sbin/start-all.sh
 
 nodes='master worker1 worker2'
 for node in \$nodes
@@ -173,14 +173,14 @@ chmod u+x stop-hive-server2.sh
 ## Start Spark history server
 cat >start-spark-history-server.sh<<EOF
 #!/bin/bash
-docker exec master /usr/local/spark/sbin/start-history-server.sh &
+docker exec master /opt/spark/sbin/start-history-server.sh &
 EOF
 chmod u+x ./start-spark-history-server.sh
 
 ## Stop Spark history server
 cat >stop-spark-history-server.sh<<EOF
 #!/bin/bash
-docker exec master /usr/local/spark/sbin/stop-history-server.sh &
+docker exec master /opt/spark/sbin/stop-history-server.sh &
 EOF
 chmod u+x ./stop-spark-history-server.sh
 
