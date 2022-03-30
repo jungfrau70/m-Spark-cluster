@@ -4,7 +4,7 @@ services:
   master:
     hostname: master
     container_name: master
-    image: jungfrau70/ubuntu18.04:de-master.5
+    image: jungfrau70/ubuntu18.04:de-master.7
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark
@@ -83,7 +83,7 @@ services:
   worker1:
     hostname: worker1
     container_name: worker1
-    image: jungfrau70/ubuntu18.04:de-worker.5
+    image: jungfrau70/ubuntu18.04:de-worker1.7
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark
@@ -154,7 +154,7 @@ services:
   worker2:
     hostname: worker2
     container_name: worker2
-    image: jungfrau70/ubuntu18.04:de-worker.5
+    image: jungfrau70/ubuntu18.04:de-worker2.7
     # build:
     #   context: .
     #   dockerfile: Dockerfile.spark

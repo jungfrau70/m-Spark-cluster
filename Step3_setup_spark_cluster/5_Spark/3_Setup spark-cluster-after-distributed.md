@@ -24,60 +24,48 @@ docker-compose up -d
 docker stats
 
 #########################################################################################
-# 1. Set Root's password for cluster nodes
+# 1. (deploy-server) re-exchange ssh keys
 #########################################################################################
 
-## Set root's password for ssh key exchange
-nodes='master worker1 worker2'
-for node in $nodes
-do 
-    echo $node
-    docker exec -it $node passwd
-done
-
-#########################################################################################
-# 2. Distribute SSH keys to cluster 
-#########################################################################################
-
-## Generate ssh key
-docker exec -it master ssh-keygen -t rsa
-docker exec -it master cp ~/.ssh/id_rsa.pub \
-~/.ssh/authorized_keys
-
-or 
-docker exec -it master /bin/bash
-ssh-keygen -t rsa
-cd ~/.ssh
-cat id_rsa.pub > authorized_keys
-
-## Remove known_hosts for ReSet, if exists
-rm -rf ~/.ssh/known_hosts 
-
-## Add nodes to known_hosts in deploy-server
-nodes='master worker1 worker2'
-for node in $nodes
-do 
-  ssh root@$node
-done
-
-## Add nodes to known_hosts in deploy-server
-nodes='master worker1 worker2'
-for node in $nodes
-do
-    #docker exec -it $node rm -rf ~/.ssh
-    ssh-copy-id root@$node
-done
-
-## Check if ansible works
-ansible -m ping cluster
-
-## Check if ssh works
-docker exec -it master ssh worker1
-docker exec -it master ssh worker2
+bash reexchange-ssh-key.sh
 
 
 #########################################################################################
-# 3. (deploy-server) Create scripts for Start/Stop Cluster
+# 2. (deploy-server) re-initialize hadoop and spark jars
+#########################################################################################
+
+bash reinitialize-hadoop.sh
+
+
+#########################################################################################
+# 3. (deploy-server) Build custom images and push them to docker registry
+#########################################################################################
+
+id='jungfrau70'
+version=6
+
+## Commit Docker image and push to repository
+docker ps -a
+docker commit master $id/ubuntu18.04:de-master.$version
+docker commit worker1 $id/ubuntu18.04:de-worker1.$version
+docker commit worker2 $id/ubuntu18.04:de-worker2.$version
+
+docker login
+
+docker push $id/ubuntu18.04:de-master.$version
+docker push $id/ubuntu18.04:de-worker1.$version
+docker push $id/ubuntu18.04:de-worker2.$version
+
+
+#########################################################################################
+# 4. (deploy-server) Apply new images in docker-compose.yml
+#########################################################################################
+
+#sed -i 's/<configuration>//g' core-site.xml
+sed -i 's/$id\/ubuntu18.04:de-master*$/$id\/ubuntu18.04:de-worker2.$version/g' docker-compose.yml
+
+#########################################################################################
+# 4. (deploy-server) Create scripts for Start/Stop Cluster
 #########################################################################################
 
 ## Stop hadoop-custer
