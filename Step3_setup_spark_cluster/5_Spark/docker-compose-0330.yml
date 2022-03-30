@@ -25,7 +25,7 @@ services:
     volumes:
       # Just specify a path and let the Engine create a volume
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      # - ~/.ssh:/root/.ssh:ro
+      - ~/.ssh:/root/.ssh:ro
       - ./spark-apps:/opt/spark-apps
       - ./spark-data:/opt/spark-data
       - ../../workspace:/root/workspace

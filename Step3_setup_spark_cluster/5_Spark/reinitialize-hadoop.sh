@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 ~/stop-hadoop-cluster.sh
 
@@ -12,5 +12,5 @@ docker exec master /opt/hadoop/bin/hdfs namenode -format
 
 ~/start-hadoop-cluster.sh
 
-docker cp ~/configure-directories.sh master:/root/
+docker cp ./configure-directories.sh master:/root/
 docker exec -it master /bin/bash /root/configure-directories.sh

@@ -11,9 +11,17 @@ Reference:
 - https://velog.io/@somnode/hadoop-cluster-install
 - https://velog.io/@somnode/spark-cluster-install
 
-export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark/'
 
-docker-compose up --build
+export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark/'
+cd $WORKDIR
+
+## (if required) clean the existing data
+rm -rf db.sql/ hive-postgres-data/ spark-apps/ spark-data
+
+## Instanticate the containers
+docker-compose up -d
+
+docker stats
 
 #########################################################################################
 # 1. Set Root's password for cluster nodes
@@ -32,6 +40,12 @@ done
 #########################################################################################
 
 ## Generate ssh key
+docker exec -it master ssh-keygen -t rsa
+docker exec -it master cp ~/.ssh/id_rsa.pub \
+~/.ssh/authorized_keys
+
+or 
+docker exec -it master /bin/bash
 ssh-keygen -t rsa
 cd ~/.ssh
 cat id_rsa.pub > authorized_keys
@@ -50,7 +64,7 @@ done
 nodes='master worker1 worker2'
 for node in $nodes
 do
-    docker exec -it $node rm -rf ~/.ssh
+    #docker exec -it $node rm -rf ~/.ssh
     ssh-copy-id root@$node
 done
 

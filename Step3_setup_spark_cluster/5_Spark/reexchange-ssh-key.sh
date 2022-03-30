@@ -1,30 +1,49 @@
 #!/bin/bash
 
+#########################################################################################
+# 1. Set Root's password for cluster nodes
+#########################################################################################
 
 ## Set root's password for ssh key exchange
 nodes='master worker1 worker2'
 for node in $nodes
-do
+do 
     echo $node
     docker exec -it $node passwd
 done
 
-## Remove existing known_hosts for ReSet
-rm -rf ~/.ssh/known_hosts*
+#########################################################################################
+# 2. Clean up the existing keys and ...
+#########################################################################################
 
-## Add nodes to new known_hosts in deploy-server(=master)
+## Clean up
 nodes='master worker1 worker2'
 for node in $nodes
 do 
-  ssh root@$node
+    docker exec -it $node rm -rf ~/.ssh
 done
 
-## Copy authorized_keys to workers
+#########################################################################################
+# 2. Distribute SSH keys to cluster 
+#########################################################################################
+
+## Generate ssh key
+docker exec -it master ssh-keygen -t rsa
+docker exec -it master cp ~/.ssh/id_rsa.pub \
+~/.ssh/authorized_keys
+
+## Add authorized_keys into worker1, worker2
 nodes='worker1 worker2'
 for node in $nodes
 do
-    docker exec -it $node rm -rf ~/.ssh
-    ssh-copy-id root@$node
+    docker exec -it master ssh-copy-id root@$node
+done
+
+## Add nodes to known_hosts in deploy-server
+nodes='master worker1 worker2'
+for node in $nodes
+do 
+  docker exec -it master ssh root@$node
 done
 
 ## Check if ssh works
