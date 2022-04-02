@@ -18,7 +18,10 @@ services:
       - type: bind
         source: ./config/hosts
         target: /etc/hosts
-
+    deploy:
+      resources:
+        limits:
+          memory: 1g
   kafka1:
     hostname: kafka1
     container_name: kafka1
@@ -42,6 +45,10 @@ services:
         target: /etc/hosts
     depends_on:
       - zookeeper
+    deploy:
+      resources:
+        limits:
+          memory: 1g
   kafka2:
     hostname: kafka2
     container_name: kafka2
@@ -65,6 +72,10 @@ services:
         target: /etc/hosts
     depends_on:
       - zookeeper
+    deploy:
+      resources:
+        limits:
+          memory: 1g
   kafka3:
     hostname: kafka3
     container_name: kafka3
@@ -88,6 +99,10 @@ services:
         target: /etc/hosts
     depends_on:
       - zookeeper
+    deploy:
+      resources:
+        limits:
+          memory: 1g
   kafdrop:
     hostname: kafdrop
     container_name: kafdrop
@@ -104,7 +119,10 @@ services:
       - kafka1
       - kafka2
       - kafka3
-
+    deploy:
+      resources:
+        limits:
+          memory: 1g
 networks:
   netgroup:
     name: netgroup

@@ -25,7 +25,10 @@ services:
         ipv4_address: 172.18.0.22
     ports:
       - '8998:8998'
-
+    deploy:
+      resources:
+        limits:
+          memory: 4g
 volumes:
     shared-workspace:
         # name: "hadoop-distributed-file-system"

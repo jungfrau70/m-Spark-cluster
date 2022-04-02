@@ -103,8 +103,6 @@ x-airflow-common:
     resources:
       limits:
         memory: 2g
-      reservations:
-        memory: 0.5g
   depends_on:
     redis:
       condition: service_healthy
@@ -224,9 +222,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2g
-        reservations:
-          memory: 0.5g
+          memory: 4g
     restart: always
 
   redis:
@@ -250,9 +246,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2g
-        reservations:
-          memory: 0.5g
+          memory: 4g
     restart: always
 
 # Names our volume

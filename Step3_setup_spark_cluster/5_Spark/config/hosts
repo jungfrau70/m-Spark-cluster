@@ -8,7 +8,7 @@
 172.18.0.16  redis
 
 172.18.0.21  master
-172.18.0.21  spark-livy
+172.18.0.22  spark-livy
 
 172.18.0.31  worker1
 172.18.0.32  worker2

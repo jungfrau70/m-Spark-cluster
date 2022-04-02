@@ -93,10 +93,16 @@ docker exec \
 ## Start cluster
 ~/start-hadoop-cluster.sh && \
 ~/start-spark-cluster.sh
+##### 
+~/start-spark-history-server.sh &&
+~/start-hive-server2.sh
 
 ## Stop cluster
 ~/stop-spark-cluster.sh && \
 ~/stop-hadoop-cluster.sh
+#####
+~/stop-spark-history-server.sh &&
+~/stop-hive-server2.sh && 
 
 ## Check cluster
 ~/check-cluster.sh

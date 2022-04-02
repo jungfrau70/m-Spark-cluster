@@ -17,3 +17,9 @@
 172.18.0.72  airflow-scheduler
 172.18.0.73  flower
 172.18.0.74  airflow-init
+
+172.18.0.80  zookeeper
+172.18.0.81  kafka1
+172.18.0.82  kafka2
+172.18.0.83  kafka3
+172.18.0.84  kafdrop

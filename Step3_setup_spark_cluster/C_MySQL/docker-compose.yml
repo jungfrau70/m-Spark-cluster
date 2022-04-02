@@ -22,7 +22,10 @@ services:
       - NET_ADMIN
     env_file:
       - mysql.env
-
+    deploy:
+      resources:
+        limits:
+          memory: 2g
 networks:
   netgroup:
     name: netgroup

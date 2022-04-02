@@ -241,7 +241,10 @@ services:
       - NET_ADMIN
     env_file:
       - postgres.env
-
+    deploy:
+      resources:
+        limits:
+          memory: 4g
 networks:
   netgroup:
     name: netgroup

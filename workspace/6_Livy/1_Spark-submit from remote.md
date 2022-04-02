@@ -58,7 +58,7 @@ curl -X POST -d '{"kind": "pyspark"}' \
 curl -X POST -d '{ 
         "kind": "pyspark",
         "code": "for i in range(1,10):  print(i)" 
-        }' -H "Content-Type: application/json" spark-livy:8998/sessions/1/statements
+        }' -H "Content-Type: application/json" spark-livy:8998/sessions/0/statements
 
 
 ## Submit Spark Job
