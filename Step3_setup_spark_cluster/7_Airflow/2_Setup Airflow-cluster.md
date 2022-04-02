@@ -4,17 +4,12 @@ Prerequsites:
 - Hive with postgres metastore
 - Spark cluster with standalone
 
-
-https://maxcotec.com/2021/11/apache-airflow-architecture#What-you-will-Learn
-
-https://github.com/maxcotec/Apache-Airflow
-
-https://github.com/Anant/example-airflow-and-spark.git
-
-Reference:
+References:
 - book: https://www.manning.com/books/data-pipelines-with-apache-airflow
 - github : https://github.com/BasPH/data-pipelines-with-apache-airflow
-
+- https://maxcotec.com/2021/11/apache-airflow-architecture#What-you-will-Learn
+- https://github.com/maxcotec/Apache-Airflow
+- https://github.com/Anant/example-airflow-and-spark.git
 
 docker stats
 

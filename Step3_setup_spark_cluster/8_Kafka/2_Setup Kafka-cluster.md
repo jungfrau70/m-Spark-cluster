@@ -1,3 +1,7 @@
+
+References:
+- https://towardsdatascience.com/connecting-the-dots-python-spark-and-kafka-19e6beba6404
+
 # Kafka - 분산데이터스트리밍 플랫폼
 
 export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/8_Kafka'
