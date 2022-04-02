@@ -305,7 +305,7 @@ cat >yarn-site.xml<<EOF
     </property>
     <property>
       <name>yarn.resourcemanager.address</name>
-      <value>master:18040</value>
+      <value>master:8032</value>
     </property>
 </configuration>
 EOF

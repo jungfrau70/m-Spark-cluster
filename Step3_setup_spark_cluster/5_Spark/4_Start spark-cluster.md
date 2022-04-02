@@ -17,7 +17,7 @@ docker stats
 # 1. (deploy-server) re-exchange ssh keys
 #########################################################################################
 
-bash reexchange-ssh-key.sh
+#bash reexchange-ssh-key.sh
 
 
 #########################################################################################
@@ -32,7 +32,7 @@ bash reinitialize-hadoop.sh
 #########################################################################################
 
 id='jungfrau70'
-version=6
+version=8
 
 ## Create Docker images
 docker ps -a
@@ -93,7 +93,7 @@ docker exec \
 ## Start cluster
 ~/start-hadoop-cluster.sh && \
 ~/start-spark-cluster.sh
-##### 
+#####
 ~/start-spark-history-server.sh &&
 ~/start-hive-server2.sh
 
@@ -102,7 +102,7 @@ docker exec \
 ~/stop-hadoop-cluster.sh
 #####
 ~/stop-spark-history-server.sh &&
-~/stop-hive-server2.sh && 
+~/stop-hive-server2.sh
 
 ## Check cluster
 ~/check-cluster.sh

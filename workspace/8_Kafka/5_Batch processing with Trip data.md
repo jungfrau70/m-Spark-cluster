@@ -43,7 +43,7 @@ docker exec -it kafka1 kafka-topics --bootstrap-server=kafka1:19091 \
 #########################################################################################
 
 ## Open IDE
-jupyter lab
+jupyter lab --allow-root
 
 ## Create producer and run
 trips_consumer.ipynb
