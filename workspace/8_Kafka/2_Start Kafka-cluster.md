@@ -1,6 +1,12 @@
-
 References:
 -. https://karthiksharma1227.medium.com/integrating-kafka-with-pyspark-845b065ab2e5
+
+export WORKDIR='/root/PySpark/workspace/8_Kafka'
+cd $WORKDIR
+
+cp config/hosts /etc/hosts
+
+ping kafka1
 
 #########################################################################################
 # 1. Start kafka-cluster
@@ -29,6 +35,9 @@ zookeeper   /docker-entrypoint.sh zkSe ...   Up      0.0.0.0:2181->2181/tcp,:::2
 
 ## Forward a port in vscode
 9000
+
+or 
+Ctrl + Shift + P, type "Forward a port"
 
 ## Open webbrowser
 http://localhost:9000

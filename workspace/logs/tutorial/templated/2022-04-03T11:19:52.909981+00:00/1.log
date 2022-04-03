@@ -1,0 +1,37 @@
+[2022-04-03 11:20:54,621] {taskinstance.py:1037} INFO - Dependencies all met for <TaskInstance: tutorial.templated scheduled__2022-04-03T11:19:52.909981+00:00 [queued]>
+[2022-04-03 11:20:54,634] {taskinstance.py:1037} INFO - Dependencies all met for <TaskInstance: tutorial.templated scheduled__2022-04-03T11:19:52.909981+00:00 [queued]>
+[2022-04-03 11:20:54,634] {taskinstance.py:1243} INFO - 
+--------------------------------------------------------------------------------
+[2022-04-03 11:20:54,634] {taskinstance.py:1244} INFO - Starting attempt 1 of 2
+[2022-04-03 11:20:54,634] {taskinstance.py:1245} INFO - 
+--------------------------------------------------------------------------------
+[2022-04-03 11:20:54,649] {taskinstance.py:1264} INFO - Executing <Task(BashOperator): templated> on 2022-04-03 11:19:52.909981+00:00
+[2022-04-03 11:20:54,655] {standard_task_runner.py:52} INFO - Started process 16067 to run task
+[2022-04-03 11:20:54,660] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'tutorial', 'templated', 'scheduled__2022-04-03T11:19:52.909981+00:00', '--job-id', '950', '--raw', '--subdir', 'DAGS_FOLDER/filebeat_dag.py', '--cfg-path', '/tmp/tmpzqcs_okr', '--error-file', '/tmp/tmp6oxlfriv']
+[2022-04-03 11:20:54,661] {standard_task_runner.py:77} INFO - Job 950: Subtask templated
+[2022-04-03 11:20:54,735] {logging_mixin.py:109} INFO - Running <TaskInstance: tutorial.templated scheduled__2022-04-03T11:19:52.909981+00:00 [running]> on host 7_***_***-worker_1.netgroup
+[2022-04-03 11:20:54,809] {taskinstance.py:1431} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_EMAIL=***@example.com
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=tutorial
+AIRFLOW_CTX_TASK_ID=templated
+AIRFLOW_CTX_EXECUTION_DATE=2022-04-03T11:19:52.909981+00:00
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2022-04-03T11:19:52.909981+00:00
+[2022-04-03 11:20:54,810] {subprocess.py:62} INFO - Tmp dir root location: 
+ /tmp
+[2022-04-03 11:20:54,811] {subprocess.py:74} INFO - Running command: ['bash', '-c', '\n\n    echo "2022-04-03"\n    echo "2022-04-10"\n\n    echo "2022-04-03"\n    echo "2022-04-10"\n\n    echo "2022-04-03"\n    echo "2022-04-10"\n\n    echo "2022-04-03"\n    echo "2022-04-10"\n\n    echo "2022-04-03"\n    echo "2022-04-10"\n']
+[2022-04-03 11:20:54,822] {subprocess.py:85} INFO - Output:
+[2022-04-03 11:20:54,826] {subprocess.py:89} INFO - 2022-04-03
+[2022-04-03 11:20:54,826] {subprocess.py:89} INFO - 2022-04-10
+[2022-04-03 11:20:54,826] {subprocess.py:89} INFO - 2022-04-03
+[2022-04-03 11:20:54,826] {subprocess.py:89} INFO - 2022-04-10
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-03
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-10
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-03
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-10
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-03
+[2022-04-03 11:20:54,827] {subprocess.py:89} INFO - 2022-04-10
+[2022-04-03 11:20:54,828] {subprocess.py:93} INFO - Command exited with return code 0
+[2022-04-03 11:20:54,867] {taskinstance.py:1282} INFO - Marking task as SUCCESS. dag_id=tutorial, task_id=templated, execution_date=20220403T111952, start_date=20220403T112054, end_date=20220403T112054
+[2022-04-03 11:20:54,917] {local_task_job.py:154} INFO - Task exited with return code 0
+[2022-04-03 11:20:54,961] {local_task_job.py:264} INFO - 0 downstream tasks scheduled from follow-on schedule check

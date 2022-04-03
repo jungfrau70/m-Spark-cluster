@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 import json
 
 LEGIT_TOPIC = "legit_payments"
-brokers = ["localhost:9091", "localhost:9092", "localhost:9093"]
+brokers = ["kafka1:19091", "kafka2:19092", "kafka3:19093"]
 consumer = KafkaConsumer(LEGIT_TOPIC, bootstrap_servers=brokers)
 
 for message in consumer:

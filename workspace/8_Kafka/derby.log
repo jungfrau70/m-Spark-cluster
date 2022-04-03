@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Apr 03 00:44:50 PDT 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-017f-ee62-3c2d-000010a5dc40 
+on database directory /root/PySpark/workspace/8_Kafka/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@1d1d3540 
+Loaded from file:/opt/spark-3.2.1-bin-hadoop3.2/jars/derby-10.14.2.0.jar
+java.vendor=Red Hat, Inc.
+java.runtime.version=1.8.0_322-b06
+user.dir=/root/PySpark/workspace/8_Kafka
+os.name=Linux
+os.arch=amd64
+os.version=3.10.0-1160.53.1.el7.x86_64
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

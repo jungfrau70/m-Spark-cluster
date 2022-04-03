@@ -1,3 +1,4 @@
+
 from kafka import KafkaProducer 
 import datetime 
 import pytz 
@@ -7,7 +8,7 @@ import json
 
 
 TOPIC_NAME = "payments"
-brokers = ["localhost:9091", "localhost:9092", "localhost:9093"]
+brokers = ["kafka1:19091", "kafka2:19092", "kafka3:19093"]
 producer = KafkaProducer(bootstrap_servers=brokers)
 
 def get_time_date():
@@ -34,6 +35,8 @@ while True:
     "TO": to,
   }
 
+  # convert python object to json, and then in utf-8 format
   producer.send(TOPIC_NAME, json.dumps(new_data).encode("utf-8"))
+
   print(new_data)
   time.sleep(1)

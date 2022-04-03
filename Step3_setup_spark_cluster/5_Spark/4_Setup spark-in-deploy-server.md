@@ -31,3 +31,17 @@ bash config/install-hadoop.sh
 ## Copy their configs 
 cp config/spark-env.sh /opt/spark/conf/
 cp config/hadoop-env.sh /opt/hadoop/etc/hadoop/
+
+## Check if spark-submit/hdfs works, and then (if not installed) Install Spark
+which spark-submit
+which hdfs
+
+
+-------------------------------------------------------
+export WORKDIR='/root/PySpark/workspace/8_Kafka'
+cd $WORKDIR
+
+export PYSPARK_DRIVER_PYTHON="jupyter"
+export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+
+pyspark --master local --packages org.apache.spark:spark-streaming-kafka-0-10_2.12:3.1.3

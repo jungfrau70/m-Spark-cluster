@@ -8,7 +8,7 @@ Prerequsites:
 export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/7_Airflow/'
 cd $WORKDIR
 
-docker-compose up
+docker-compose up -d
 
 #########################################################################################
 # 2. Watch Services

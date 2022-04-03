@@ -8,6 +8,12 @@ Prerequsites:
 export WORKDIR='/root/PySpark/workspace/8_Kafka'
 cd $WORKDIR
 
+## Create kafka virtual environment
+conda env create -f environment.yml
+
+## Remove kafka virtual environment
+conda env remove -n kafka
+
 ## Check conda environments
 conda env list
 # conda environments:
@@ -18,8 +24,11 @@ kafka                    /opt/conda/envs/kafka
 ## Activate virtual environment, kafka
 conda activate kafka
 
-## Start jupyter
-jupyter lab
+#########################################################################################
+# 2. (deploy-server) Start jupyter lab
+#########################################################################################
 
-## vscode
-(kafka) [root@deploy-server cluster]#
+export WORKDIR='/root/PySpark/workspace/8_Kafka'
+cd $WORKDIR
+
+jupyter lab

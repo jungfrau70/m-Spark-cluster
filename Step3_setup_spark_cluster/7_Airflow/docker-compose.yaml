@@ -57,7 +57,7 @@ x-airflow-common:
   volumes:
     # Just specify a path and let the Engine create a volume
     - ../../workspace/dags:/opt/airflow/dags:z
-    - logs:/opt/airflow/logs
+    - ../../workspace/logs:/opt/airflow/logs
     - plugins:/opt/airflow/plugins
     - type: bind
       source: ./config/spark-defaults.conf
