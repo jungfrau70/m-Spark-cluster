@@ -1,0 +1,6 @@
+name: kafka
+dependencies:
+  - ipywidgets
+  - jupyterlab
+  - python=3.6
+  - pip

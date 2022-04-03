@@ -1,5 +1,0 @@
-{
-  "kernel_python_credentials" : {
-    "url": "http://spark-livy:8998"
-  }
-}

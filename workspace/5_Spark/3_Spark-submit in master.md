@@ -8,7 +8,7 @@ Prerequsites:
 # 1. (deploy-server) Upload data in hadoop
 #########################################################################################
 
-export WORKDIR='/root/PySpark-remote/workspace/5_Spark'
+export WORKDIR='/root/PySpark/workspace/5_Spark'
 cd $WORKDIR
 
 docker cp ../database.csv master:/root/
@@ -81,7 +81,7 @@ spark-submit --master local pi.py
 # 5. (master) Check if spark-submit works with mongodb
 #########################################################################################
 
-export WORKDIR='/root/workspace/7_Airflow/SparkSubmitOperator'
+export WORKDIR='/root/workspace/4_Airflow/SparkSubmitOperator'
 cd $WORKDIR
 
 spark-submit \

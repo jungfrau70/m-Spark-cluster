@@ -1,0 +1,253 @@
+version: '3.7'
+
+services:
+  master:
+    hostname: master
+    container_name: master
+    image: jungfrau70/ubuntu18.04:de-master.1
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    command: >
+      /bin/sh -c "service ssh start &&
+                  tail -f /dev/null"
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.21
+    ports:
+      - "7077:7077"
+      - "8088:8088"
+      - "8888:8888"
+      - "9090:8080"
+      - "18040:18040"
+      - "18080:18080"
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ~/.ssh:/root/.ssh:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+      - ../../workspace:/root/workspace
+      - type: bind
+        source: ./config/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
+      - type: bind
+        source: ./config/spark-slaves
+        target: /opt/spark/conf/slaves
+      - type: bind
+        source: ./config/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
+      - type: bind
+        source: ./config/hadoop-workers
+        target: /opt/hadoop/etc/hadoop/workers
+      - type: bind
+        source: ./config/hadoop-slaves
+        target: /opt/hadoop/etc/hadoop/slaves
+      - type: bind
+        source: ./config/hadoop-env.sh
+        target: /opt/hadoop/etc/hadoop/hadoop-env.sh
+      - type: bind
+        source: ./config/core-site.xml
+        target: /opt/hadoop/etc/hadoop/core-site.xml
+      - type: bind
+        source: ./config/hdfs-site.xml
+        target: /opt/hadoop/etc/hadoop/hdfs-site.xml
+      - type: bind
+        source: ./config/mapred-site.xml
+        target: /opt/hadoop/etc/hadoop/mapred-site.xml
+      - type: bind
+        source: ./config/yarn-site.xml
+        target: /opt/hadoop/etc/hadoop/yarn-site.xml
+      - type: bind
+        source: ./config/hive-env.sh
+        target: /opt/hive/conf/hive-env.sh
+      - type: bind
+        source: ./config/hive-site.xml
+        target: /opt/hive/conf/hive-site.xml        
+      - type: bind
+        source: ./config/hosts
+        target: /etc/hosts
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+        reservations:
+          memory: 2g
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker1:
+    hostname: worker1
+    container_name: worker1
+    image: jungfrau70/ubuntu18.04:de-worker.1
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    command: >
+      /bin/sh -c "service ssh start &&
+                  tail -f /dev/null"
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.31
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+      - type: bind
+        source: ./config/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
+      - type: bind
+        source: ./config/spark-slaves
+        target: /opt/spark/conf/slaves
+      - type: bind
+        source: ./config/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
+      - type: bind
+        source: ./config/hadoop-workers
+        target: /opt/hadoop/etc/hadoop/workers
+      - type: bind
+        source: ./config/hadoop-slaves
+        target: /opt/hadoop/etc/hadoop/slaves
+      - type: bind
+        source: ./config/hadoop-env.sh
+        target: /opt/hadoop/etc/hadoop/hadoop-env.sh
+      - type: bind
+        source: ./config/core-site.xml
+        target: /opt/hadoop/etc/hadoop/core-site.xml
+      - type: bind
+        source: ./config/hdfs-site.xml
+        target: /opt/hadoop/etc/hadoop/hdfs-site.xml
+      - type: bind
+        source: ./config/mapred-site.xml
+        target: /opt/hadoop/etc/hadoop/mapred-site.xml
+      - type: bind
+        source: ./config/yarn-site.xml
+        target: /opt/hadoop/etc/hadoop/yarn-site.xml
+      - type: bind
+        source: ./config/hive-env.sh
+        target: /opt/hive/conf/hive-env.sh
+      - type: bind
+        source: ./config/hive-site.xml
+        target: /opt/hive/conf/hive-site.xml        
+      - type: bind
+        source: ./config/hosts
+        target: /etc/hosts
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+        reservations:
+          memory: 4g
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  worker2:
+    hostname: worker2
+    container_name: worker2
+    image: jungfrau70/ubuntu18.04:de-worker.1
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    command: >
+      /bin/sh -c "service ssh start &&
+                  tail -f /dev/null"
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.32
+    depends_on:
+      - master
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./spark-apps:/opt/spark-apps
+      - ./spark-data:/opt/spark-data
+      - type: bind
+        source: ./config/spark-defaults.conf
+        target: /opt/spark/conf/spark-defaults.conf
+      - type: bind
+        source: ./config/spark-slaves
+        target: /opt/spark/conf/slaves
+      - type: bind
+        source: ./config/spark-env.sh
+        target: /opt/spark/conf/spark-env.sh
+      - type: bind
+        source: ./config/hadoop-workers
+        target: /opt/hadoop/etc/hadoop/workers
+      - type: bind
+        source: ./config/hadoop-slaves
+        target: /opt/hadoop/etc/hadoop/slaves
+      - type: bind
+        source: ./config/hadoop-env.sh
+        target: /opt/hadoop/etc/hadoop/hadoop-env.sh
+      - type: bind
+        source: ./config/core-site.xml
+        target: /opt/hadoop/etc/hadoop/core-site.xml
+      - type: bind
+        source: ./config/hdfs-site.xml
+        target: /opt/hadoop/etc/hadoop/hdfs-site.xml
+      - type: bind
+        source: ./config/mapred-site.xml
+        target: /opt/hadoop/etc/hadoop/mapred-site.xml
+      - type: bind
+        source: ./config/yarn-site.xml
+        target: /opt/hadoop/etc/hadoop/yarn-site.xml
+      - type: bind
+        source: ./config/hive-env.sh
+        target: /opt/hive/conf/hive-env.sh
+      - type: bind
+        source: ./config/hive-site.xml
+        target: /opt/hive/conf/hive-site.xml        
+      - type: bind
+        source: ./config/hosts
+        target: /etc/hosts
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+        reservations:
+          memory: 4g
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - cluster.env
+
+  hive-postgres:
+    hostname: hive-postgres
+    container_name: hive-postgres
+    image: postgres:9.6.24 # latest
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.11
+    ports:
+    - "6432:5432"
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - postgres.env
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

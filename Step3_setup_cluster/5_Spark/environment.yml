@@ -1,0 +1,6 @@
+name: pyspark
+dependencies:
+  - ipywidgets
+  - jupyterlab
+  - pip
+  - python=3.6

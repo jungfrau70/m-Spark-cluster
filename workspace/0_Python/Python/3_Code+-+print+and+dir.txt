@@ -1,9 +1,0 @@
-### print
-print('I am learning: {course}, and this course is {fill}'.format(course='spark',fill='awesome'))
-print('I am learning: {}, and this course is: {}'.format('spark','awesome'))
-
-### dir()
-s = 'spark'
-dir(s)
-dir(__builtins__)
-help(str)

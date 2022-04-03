@@ -1,0 +1,55 @@
+FROM jungfrau70/centos7:ansible.1
+#FROM jupyter/all-spark-notebook:spark-3.2.1 as spark
+#FROM fabric8/java-centos-openjdk11-jre
+#ENV PATH /opt/conda/bin:$PATH
+#COPY --from=spark /opt/conda/ /opt/conda
+#COPY --from=spark /opt/spark-3.2.1-bin-hadoop3.2 /opt/spark-3.2.1-bin-hadoop3.2
+#RUN ln -s /opt/spark-3.2.1-bin-hadoop3.2 /opt/spark
+
+USER root
+RUN yum install -y java-1.8.0-openjdk-devel
+RUN yum install -y wget which
+
+COPY ./config/install-python3.sh .
+RUN bash install-python3.sh
+
+#COPY ./config/install-openssh.sh .
+#RUN bash install-openssh.sh
+
+COPY ./config/install-hadoop.sh .
+RUN bash install-hadoop.sh
+
+#COPY ./config/install-hive.sh .
+#RUN bash install-hive.sh
+
+COPY ./config/install-spark.sh .
+RUN bash install-spark.sh
+
+COPY ./config/spark-defaults.conf /opt/spark/conf/
+COPY ./config/spark-slaves /opt/spark/conf/slaves
+COPY ./config/spark-env.sh /opt/spark/conf/spark-env.sh
+
+COPY ./config/hadoop-workers /opt/hadoop/etc/hadoop/workers
+COPY ./config/hadoop-slaves /opt/hadoop/etc/hadoop/slaves
+COPY ./config/hadoop-env.sh /opt/hadoop/etc/hadoop/hadoop-env.sh
+
+COPY ./config/core-site.xml /opt/hadoop/etc/hadoop/core-site.xml
+COPY ./config/hdfs-site.xml /opt/hadoop/etc/hadoop/hdfs-site.xml
+COPY ./config/mapred-site.xml /opt/hadoop/etc/hadoop/mapred-site.xml
+COPY ./config/yarn-site.xml /opt/hadoop/etc/hadoop/yarn-site.xml
+
+#COPY ./config/hive-env.sh /opt/hive/conf/hive-env.sh
+#COPY ./config/hive-site.xml /opt/hive/conf/hive-site.xml
+COPY ./config/hosts /etc/hosts
+
+#RUN rm /opt/hive/lib/guava*.jar && \
+#    cp /opt/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/ || echo "not exist"
+
+#### Download a postgresql jar file and copy it to /opt/hive/lib/
+#RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar --no-check-certificate -O /opt/hive/lib/postgresql-42.2.24.jar 
+
+## Install  MongoDB JDBC jar in Spark jars folder.
+RUN wget https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.11/2.4.0/mongo-spark-connector_2.11-2.4.0.jar --no-check-certificate -O /opt/spark/jars/mongo-spark-connector_2.11-2.4.0.jar
+
+## Install  MongoDB JDBC jar in Spark jars folder.
+RUN wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar --no-check-certificate -O /opt/spark/jars/mysql-connector-java-8.0.28.jar

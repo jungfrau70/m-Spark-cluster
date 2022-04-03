@@ -2,7 +2,7 @@
 # 1. (deploy-server) Preparation to start services
 #########################################################################################
 
-export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark/'
+export WORKDIR='/root/PySpark/Step3_setup_cluster/5_Spark/'
 cd $WORKDIR
 
 ## (If required) Instanticate the containers
@@ -44,7 +44,7 @@ docker exec master /opt/hadoop/bin/hdfs dfs -ls /
 # 4. (deploy-server) Preparation to start services
 #########################################################################################
 
-export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark/'
+export WORKDIR='/root/PySpark/Step3_setup_cluster/5_Spark/'
 cd $WORKDIR
 
 docker-compose down

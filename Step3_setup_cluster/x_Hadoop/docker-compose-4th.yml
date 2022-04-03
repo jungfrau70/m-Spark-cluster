@@ -1,0 +1,99 @@
+version: '3.7'
+
+services:
+  hadoop-master:
+    container_name: hadoop-master
+    image: jungfrau70/centos7:hadoop.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.11
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ~/.ssh:/root/.ssh:ro
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname hadoop-worker3
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - hadoop.env
+    secrets:
+      - host_ssh_key
+
+  hadoop-worker1:
+    container_name: hadoop-worker1
+    image: jungfrau70/centos7:hadoop.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.31
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname hadoop-worker3
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - hadoop.env
+
+  hadoop-worker2:
+    container_name: hadoop-worker2
+    image: jungfrau70/centos7:hadoop.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.32
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname hadoop-worker3
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - hadoop.env
+
+  hadoop-worker3:
+    container_name: hadoop-worker3
+    image: jungfrau70/centos7:hadoop.1
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.33
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    entrypoint: ["/usr/sbin/init"]
+    command:
+      - |
+        /usr/bin/hostnamectl set-hostname hadoop-worker3
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - hadoop.env
+      
+secrets:
+  host_ssh_key:
+    file: ~/.ssh/id_rsa
+
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

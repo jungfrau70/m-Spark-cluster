@@ -1,5 +1,0 @@
-name: livy
-dependencies:
-  - ipywidgets
-  - jupyterlab
-  - pip

@@ -1,0 +1,51 @@
+### Create a Function
+def my_function():
+  print("Hello from a learn-spark.com")
+
+####  Call the function  
+my_function()
+
+### Return a Value
+We can use a return clause to return a value from a function.
+def my_function():
+  return "Hello from a learn-spark.com"
+
+### Arguments or Parameter
+# Functions can take one or more parameters
+
+def add(a, b):
+  return a + b
+
+add(10,20)
+
+### Keyword Arguments
+Key-value format.
+
+def add(a, b):
+  return a + b
+
+add(a = 10, b = 20)
+
+### Arbitrary Arguments, *args
+
+def learn(*courses):
+  print("Mr X is learning " + courses[2])
+
+learn("Hadoop", "Python", "Spark")
+
+### Arbitrary Keyword Arguments, **kwargs
+
+def func(**student):
+  print("Student last name is " + student["lname"])
+
+func(fname = "Robert", lname = "Gee")
+
+### Default Parameter Value
+
+def add(a=10, b=30):
+  return a + b
+
+add()
+
+### End ###
+

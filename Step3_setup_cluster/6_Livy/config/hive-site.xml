@@ -1,0 +1,72 @@
+<configuration>
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:postgresql://hive-postgres:5432/metastore</value>
+    <description>JDBC Driver Connection for PostgrSQL</description>
+  </property>
+ 
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>org.postgresql.Driver</value>
+    <description>PostgreSQL metastore driver class name</description>
+  </property>
+ 
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+    <description>Database User Name</description>
+  </property>
+ 
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>go2team</value>
+    <description>Database User Password</description>
+  </property>
+
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>hdfs://master:9000/apps/hive/warehouse</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.schema.verification</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.uris</name>
+    <value>thrift://master:9083</value>
+    <description>Hive metastore Thrift server</description>
+  </property>
+
+  <property>
+    <name>hdatanucleus.autoStartMechanismMode</name>
+    <value>ignored</value>
+  </property>
+
+  <property>
+    <name>hive.server2.transport.mode</name>
+    <value>binary</value>
+  </property>
+
+  <property>
+    <name>hive.server2.authentication</name>
+    <value>NOSASL</value>
+  </property>
+
+  <property>
+    <name>hive.server2.enable.doAs</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hive.server2.thrift.min.worker.threads</name>
+    <value>5</value>
+  </property>
+
+  <property>
+    <name>hive.server2.thrift.max.worker.threads</name>
+    <value>500</value>
+  </property>
+
+</configuration>

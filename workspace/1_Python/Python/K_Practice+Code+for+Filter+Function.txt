@@ -1,0 +1,8 @@
+Filter:
+
+#Practice 1
+marks=[50,70,65,99,15,31,49]
+def student_a_grade(mark):
+ return mark > 60
+ 
+filter(student_a_grade,marks)

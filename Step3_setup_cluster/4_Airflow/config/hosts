@@ -1,0 +1,25 @@
+127.0.0.1   localhost spark-livy.local
+
+172.18.0.11  hive-postgres
+172.18.0.12  mysql
+172.18.0.13  mongo
+172.18.0.14  postgres
+172.18.0.15  airflow-postgres
+172.18.0.16  redis
+
+172.18.0.21  master
+172.18.0.22  spark-livy
+
+172.18.0.31  worker1
+172.18.0.32  worker2
+
+172.18.0.71  airflow-webserver
+172.18.0.72  airflow-scheduler
+172.18.0.73  flower
+172.18.0.74  airflow-init
+
+172.18.0.80  zookeeper
+172.18.0.81  kafka1
+172.18.0.82  kafka2
+172.18.0.83  kafka3
+172.18.0.84  kafdrop

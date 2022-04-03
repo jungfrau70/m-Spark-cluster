@@ -1,0 +1,17 @@
+class Person:
+    def __init__(self,age):
+        self.new_age = age
+    def sleep(self,hours):
+        return str(hours * 60) + 'minutes'
+    def get_age(self):
+        return self.new_age
+    def set_age(self,age):
+        self.new_age = age
+
+robert = Person(20)
+print(robert.get_age())
+
+robert.set_age(25)
+print(robert.get_age())
+
+

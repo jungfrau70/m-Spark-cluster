@@ -1,0 +1,289 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+# Basic Airflow cluster configuration for CeleryExecutor with Redis and PostgreSQL.
+#
+# WARNING: This configuration is for local development. Do not use it in a production deployment.
+#
+# This configuration supports basic configuration using environment variables or an .env file
+# The following variables are supported:
+#
+# AIRFLOW_IMAGE_NAME         - Docker image name used to run Airflow.
+#                              Default: apache/airflow:master-python3.8
+# AIRFLOW_UID                - User ID in Airflow containers
+#                              Default: 50000
+# AIRFLOW_GID                - Group ID in Airflow containers
+#                              Default: 50000
+# _AIRFLOW_WWW_USER_USERNAME - Username for the administrator account.
+#                              Default: airflow
+# _AIRFLOW_WWW_USER_PASSWORD - Password for the administrator account.
+#                              Default: airflow
+#
+# Feel free to modify this file to suit your needs.
+---
+version: '3'
+x-airflow-common:
+  &airflow-common
+  #image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.1.0}
+  image: jungfrau70/airflow:latest
+  build:
+    context: .
+    dockerfile: Dockerfile.airflow
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@airflow-postgres/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+  volumes:
+    # Just specify a path and let the Engine create a volume
+    - ../../workspace/dags:/opt/airflow/dags:z
+    - logs:/opt/airflow/logs
+    - plugins:/opt/airflow/plugins
+    - type: bind
+      source: ./config/hosts
+      target: /etc/hosts
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  logging:
+    options:
+      max-size: 10m
+      max-file: "3"
+  env_file:
+    - airflow.env
+  deploy:
+    resources:
+      limits:
+        memory: 2g
+      reservations:
+        memory: 0.5g
+  depends_on:
+    redis:
+      condition: service_healthy
+    airflow-postgres:
+      condition: service_healthy
+
+services:
+
+  airflow-init:
+    hostname: airflow-init
+    container_name: airflow-init
+    <<: *airflow-common
+    command: version
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.74
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+    privileged: true
+
+  airflow-webserver:
+    hostname: airflow-webserver
+    container_name: airflow-webserver
+    <<: *airflow-common
+    command: webserver
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.71
+    ports:
+      - 8080:8080
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-scheduler:
+    hostname: airflow-scheduler
+    container_name: airflow-scheduler
+    <<: *airflow-common
+    command: scheduler
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.72
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  flower:
+    hostname: flower
+    container_name: flower
+    <<: *airflow-common
+    command: celery flower
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.73
+    ports:
+      - 5555:5555
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-worker:
+    <<: *airflow-common
+    command: celery worker
+    networks:
+      netgroup:
+    restart: always
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 1g
+
+  airflow-postgres:
+    hostname: airflow-postgres
+    container_name: airflow-postgres
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.15
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 0.5g
+    restart: always
+
+  redis:
+    hostname: redis
+    container_name: redis
+    image: redis:latest
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.16
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 0.5g
+    restart: always
+
+# Names our volume
+volumes:
+  dags:
+  logs:
+  plugins:
+  prometheus_data:
+  grafana_data:
+  postgres-db-volume:
+
+  
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
+  # statsd-exporter:
+  #   image: prom/statsd-exporter:v0.21.0
+  #   volumes:
+  #     - ./config/statsd.yaml:/home/statsd-mapping-configs.yaml
+  #   entrypoint: ["/bin/sh", "-c", "--"]
+  #   command: ["statsd_exporter --log.level debug --statsd.mapping-config=/home/statsd-mapping-configs.yaml"]
+  #   networks:
+  #     netgroup:
+  #   ports:
+  #     - 9102:9102   # scrape port
+  #     - 9125:9125   # ingest port
+  #   restart: always
+
+  # prometheus:
+  #   image: prom/prometheus:v2.26.0
+  #   volumes:
+  #     - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml
+  #     - prometheus_data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yaml'
+  #     - '--storage.tsdb.path=/prometheus'
+  #     - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+  #     - '--web.console.templates=/usr/share/prometheus/consoles'
+  #   networks:
+  #     netgroup:
+  #   ports:
+  #     - 9092:9090
+  #   restart: always
+
+  # grafana:
+  #   image: grafana/grafana:6.7.2
+  #   container_name: grafana
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_SECURITY_ADMIN_PASSWORD=grafana
+  #     - GF_USERS_ALLOW_SIGN_UP=false
+  #   restart: always
+  #   networks:
+  #     netgroup:
+  #   ports:
+  #     - 3000:3000

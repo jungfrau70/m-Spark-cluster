@@ -1,0 +1,97 @@
+### Built-in methods that can be applied to list(__builtins__)
+len
+max
+min
+list
+
+### List Methods(dir)
+append()-->Adds an element at the end of the list
+lst = ['a', 'b', 'c', 'd']
+lst.append('e')
+print(lst)
+
+clear()	-->Removes all the elements from the list. Empty List.(Version 3.3)
+                          del keyword delete the list completely.
+lst=[1,2,3]
+lst.clear()
+print(lst)
+
+copy()	--> Returns a copy of the list. Both will have different address id. (Version 3.3)
+#Copy a list
+list1=["apple", "banana", "cherry"]
+list2 = list1  #Copy a list but both point to the same location
+id(list1) #Memory ID
+id(list2) # Memory ID
+#Memory ID of both list 1 and list2 will be same as both are referencing to the same location.
+#So changes made to list1 will reflect to list2 and vice versa
+    
+#Use copy() method
+list2 = list1.copy()
+#Memory ID will be different for both the lists.
+
+#Also we can use list() method.
+list2 = list(list1)
+
+count()	--> Returns the number of elements with the specified value. 
+my_list = [1,2,3,4,5,1,2,3]
+my_list.count(3)
+
+index(start,stop) -->Returns the index of the first element with the specified value.
+#Find the index of an element
+my_list = ['a','b','c','d','e']
+print(my_list.index('b'))
+#Index of Element starting with 2
+print(my_list.index('c',2)) 
+
+insert(index,object)-->Adds an element at the specified position.
+my_list = ['a','b','c','d','e']
+my_list.insert(0,'x')
+my_list
+
+pop()-->Removes the element at the specified position
+my_list = [1,2,3,4,5]
+#By Default Last Element is deleted
+my_list.pop()
+#Delete the Second Position Element
+my_list.pop(2)
+my_list
+
+remove()-->Removes the item with the specified value
+lst = ['a','b','c','d','e']
+lst.remove('b')
+lst
+
+reverse()-->Reverses the order of the list
+lst=[5,4,-10,15,1]
+lst.reverse()   #The parent list will be reverse
+
+#Using Python Built-in functions
+list(reversed(lst))   #Parent list will not change
+
+#Also below will work.
+lst[::-1]
+
+sort(reverse)-->Sorts the list
+lst.sort()
+
+### sorted() function
+sorted is used to sort any sequence
+sorted(iterable,key, reverse) #Last 2 parameters are optional
+Returns a list
+
+list=[5,3,9,11,2,27]
+print(sorted(list))
+
+list = ['Python','Spark','Java','C']
+print(sorted(list, key=len))
+print(sorted(list, key=len),reverse=True)
+
+############## END ###############
+
+
+
+
+
+
+
+

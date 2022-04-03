@@ -1,0 +1,6 @@
+requests
+pandas
+boto3
+apache-airflow==${AIRFLOW_VERSION} --constraint ${CONSTRAINT_URL}
+pyspark==${PYSPARK_VERSION}
+apache-airflow-providers-apache-spark

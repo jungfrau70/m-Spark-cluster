@@ -1,0 +1,92 @@
+FROM apache/airflow:2.2.4-python3.7
+
+USER 0
+RUN apt-get update -y && apt-get install -y software-properties-common
+RUN cat /etc/os-release
+RUN apt-add-repository 'deb http://security.debian.org/debian-security stretch/updates main'
+RUN apt-get update -y && apt-get install -y openjdk-8-jdk
+RUN apt-get install -y iputils-ping net-tools git
+
+USER 0
+RUN mkdir -p /home/airflow/.ivy2
+RUN chown 50000:50000 /home/airflow/.ivy2
+RUN chmod 777 /home/airflow/.ivy2
+RUN mkdir -p /home/airflow/.config
+RUN chown 50000:50000 /home/airflow/.config
+RUN chmod 777 /home/airflow/.config
+
+# Install Dependencies of Miniconda
+RUN apt-get update --fix-missing && \
+    apt-get install -y wget bzip2 curl git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install miniconda3
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -tipsy && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh 
+
+## Set Env
+ENV PATH=$PATH:/opt/conda/bin
+ENV PATH=$PATH:/root/.local/bin
+ENV AIRFLOW_HOME=/opt/airflow
+ENV AIRFLOW_VERSION="2.2.4"
+ENV PYTHON_VERSION="3.7"
+ENV PYSPARK_VERSION="3.0.3"
+ENV CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+RUN chown -R 50000:50000 /opt/conda
+RUN chown -R 50000:50000 /opt/airflow
+
+USER 50000
+
+# Create the conda virtual environment:
+RUN conda update -n base -c defaults conda
+COPY environment.yml .
+RUN conda env create -f environment.yml && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate pipeline" >> ~/.bashrc
+
+# Initialize conda in bash config fiiles:
+RUN conda init bash
+
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "pipeline", "/bin/bash", "-c"]
+
+RUN python -m pip install --upgrade pip
+COPY requirements.txt .
+RUN python -m pip install --user -r requirements.txt
+
+# Activate the environment, and make sure it's activated:
+RUN echo "Make sure airflow is installed:"
+RUN python -c "import airflow"
+
+RUN sed -i "s/dags_folder =.*/dags_folder = \/opt\/airflow\/dags/g" /opt/airflow/airflow.cfg
+RUN sed -i "107s/True/False/" /opt/airflow/airflow.cfg  # Disable
+#RUN sed -i "107s/False/True/" /opt/airflow/airflow.cfg  # Enable
+
+USER 0
+
+COPY ./config/install-spark.sh .
+RUN bash install-spark.sh
+RUN chown 50000:50000 -R /opt/spark
+
+COPY ./config/install-hadoop.sh .
+RUN bash install-hadoop.sh
+RUN chown 50000:50000 -R /opt/hadoop
+
+USER 50000
+
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH="/usr/lib/jvm/java-8-openjdk-amd64/bin:${PATH}"
+
+ENV SPARK_HOME="/opt/spark"
+ENV PATH="/opt/spark/bin:${PATH}"
+
+ENV HADOOP_HOME="/opt/hadoop"
+ENV PATH="/opt/hadoop/bin:${PATH}"
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint"]
+CMD ["--help"]

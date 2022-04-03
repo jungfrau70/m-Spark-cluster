@@ -1,0 +1,69 @@
+Set:
+ --Unordered : No Index
+ --Unchangeable: Elements can be added(add()) or deleted(remove()) but can’t changed.
+ --Duplicates Not Allowed.
+
+### show that duplicates have been removed
+basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+print(basket)                      
+
+### membership testing
+'orange' in basket                 
+True
+
+### Support Math operations like union, intersection, difference, symmetric difference etc
+a = set('abracadabra')
+b = set('alacazam')
+a                                  # unique letters in a
+a | b                              # letters in a or b or both
+a & b                              # letters in both a and b
+a ^ b                              # letters in a or b but not both
+
+### Support List comprehensions
+{x for x in 'abracadabra' if x not in 'abc'}
+
+### Set functions(dir():
+
+s1 = {1,2,3,4,5}
+s2 = {4,5,6,7,8}
+
+add 
+ s1.add(6))
+
+difference
+s1.difference(s2)
+difference_update (The output will be updated to the first set)
+s1.difference_update(s2)
+
+symmetric_difference
+s1.symmetric_difference(s2)
+
+symmetric_difference_update
+s1.symmetric_difference_update(s2)
+
+Intersection
+s1.intersection(s2)
+intersection_update
+s1.intersection_update(s2)
+
+union
+s1.union(s2)
+
+Discard (Remove an element from a set if it is a member. If the element is not a member, do nothing)
+s1.discard(10)
+
+Isdisjoint
+s1.isdisjoint(s2)
+issubset
+s1.issubset(s2)
+Issuperset
+s1.issuperset(s2)
+
+pop
+remove
+clear
+copy
+update
+
+
+

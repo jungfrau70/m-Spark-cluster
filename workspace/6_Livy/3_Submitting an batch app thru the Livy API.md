@@ -6,6 +6,7 @@ Prerequsites:
 
 References:
 - https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/running-spark-applications/topics/spark-interactive-session-livy-api.html?
+- http://livy.incubator.apache.org/docs/latest/rest-api.html
 
 
 #########################################################################################
@@ -27,7 +28,7 @@ docker exec master /opt/hadoop/bin/hdfs dfs -ls /
 # 2. (deploy-server) Check Environment
 #########################################################################################
 
-export WORKDIR='/root/PySpark/Step3_setup_spark_cluster/5_Spark'
+export WORKDIR='/root/PySpark/Step3_setup_cluster/5_Spark'
 cd $WORKDIR
 
 ## Check if spark-submit/hdfs works, and then (if not installed) Install Spark
@@ -87,9 +88,7 @@ spark-submit \
 1000
 
 ## Example - spark-submit using Livy
-curl -X POST -d '{ "pyFiles": ["hdfs://master:9000/pi.py"] }' \
-        -H "Content-Type: application/json"   spark-livy:8998/batches
-curl -X POST -d '{ "pyFiles": ["/root/PySpark/workspace/5_Spark/pi.py"] }' \
+curl -X POST -d '{ "file": "hdfs://master:9000/pi.py" }' \
         -H "Content-Type: application/json"   spark-livy:8998/batches
 
 ## in python3 with requests, textwrap
@@ -186,7 +185,7 @@ curl -X POST -d '{
 # 5. (deploy-server) Delete the spark session in Livy
 #########################################################################################
 
-curl -X DELETE -d '{"kind": "pyspark"}'   -H "Content-Type: application/json"   spark-livy:8998/sessions/0
+curl -X DELETE -d '{"kind": "pyspark"}'   -H "Content-Type: application/json"   spark-livy:8998/batches/1
 
 
 

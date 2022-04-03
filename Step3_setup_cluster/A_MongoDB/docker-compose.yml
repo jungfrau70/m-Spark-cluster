@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  mongo:
+    hostname: mongo
+    container_name: mongo
+    image: mongo:latest # 4.4.13
+    restart: always
+    networks:
+      netgroup:
+        ipv4_address: 172.18.0.13
+    ports:
+      - 27017:27017
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - ./mongodb-data:/data/db # -v 옵션 (다렉토리 마운트 설정)
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - mongo.env
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+networks:
+  netgroup:
+    name: netgroup
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
